@@ -1,5 +1,6 @@
 import pygame
 import random
+from moviepy.editor import VideoFileClip
 
 # Initialize pygame
 pygame.init()
@@ -41,6 +42,7 @@ obstacle_img = pygame.transform.scale(pygame.image.load('obstacle.png'), (GRID_S
 
 # Define creative font for the scoreboard (custom font)
 creative_font = pygame.font.Font(pygame.font.match_font('Comic Sans MS'), 40)  # Comic Sans as an example
+
 # Define regular font for agent scores
 font = pygame.font.SysFont(None, 30)
 
@@ -83,7 +85,7 @@ class Agent:
                 self.x = new_x
                 self.y = new_y
             else:
-                # Deduct points if agent hits an obstacle
+                # Deduct points if the agent hits an obstacle
                 self.score -= 2
 
     def draw(self, screen):
@@ -130,10 +132,10 @@ while len(resources) < NUM_RESOURCES:
 
 # Draw scoreboard in a tabular format with borders and padding
 def draw_scoreboard(screen, agents):
-    pygame.draw.rect(screen, DARK_GREY, (0, HEIGHT, WIDTH, SCOREBOARD_HEIGHT))  # Dark grey background for scoreboard
-    
+    pygame.draw.rect(screen, DARK_GREY, (0, HEIGHT, WIDTH, SCOREBOARD_HEIGHT))  # Dark grey background for the scoreboard
+
     # Adjust the title position
-    title_text = creative_font.render("RESOURCE HUNTERS-Scorecard", True, WHITE)
+    title_text = creative_font.render("RESOURCE HUNTERS - Scorecard", True, WHITE)
     title_width = title_text.get_width()
     screen.blit(title_text, (WIDTH // 2 - title_width // 2, HEIGHT + 30))  # Increased space above the title
 
@@ -143,8 +145,7 @@ def draw_scoreboard(screen, agents):
     # Display agents in a 3x2 table format
     for i, agent in enumerate(agents):
         row = i // 3  # Row index (0 or 1)
-        col = i % 3   # Column index (0, 1, or 2)
-        
+        col = i % 3  # Column index (0, 1, or 2)
         cell_x = col * cell_width
         cell_y = HEIGHT + 80 + row * cell_height  # Increased space below the title
 
@@ -166,39 +167,74 @@ def draw_scoreboard(screen, agents):
         screen.blit(score_text, (cell_x + GRID_SIZE + 2 * CELL_PADDING, cell_y + CELL_PADDING))
 
 # Create agents, including one human-controlled agent
-agents = [Agent(random.randint(0, (WIDTH // GRID_SIZE) - 1) * GRID_SIZE,
-                random.randint(0, (HEIGHT // GRID_SIZE) - 1) * GRID_SIZE, 
-                f"Agent {i+1}", agent_images[i], human_control=(i == 0))  # First agent is human-controlled
+agents = [Agent(random.randint(0, (WIDTH // GRID_SIZE) - 1) * GRID_SIZE, random.randint(0, (HEIGHT // GRID_SIZE) - 1) * GRID_SIZE, f"Agent {i+1}", agent_images[i], human_control=(i == 0))  # First agent is human-controlled
           for i in range(NUM_AGENTS)]
 
-def display_winner(winner):
-    # Display winner pop-up
-    popup_width, popup_height = 400, 200
-    popup_x = (WIDTH - popup_width) // 2
-    popup_y = (HEIGHT - popup_height) // 2
+def display_winner_and_play_video(winner):
+    try:
+        # Display winner pop-up
+        popup_width, popup_height = 400, 200
+        popup_x = (WIDTH - popup_width) // 2
+        popup_y = (HEIGHT - popup_height) // 2
 
-    # Create a fade effect
-    for alpha in range(0, 255, 5):  # Fade in
-        screen.fill((0, 0, 0))  # Clear the screen
-        pygame.draw.rect(screen, (0, 0, 0, alpha), (popup_x, popup_y, popup_width, popup_height))
-        winner_text = creative_font.render(f"{winner} is the Winner!", True, WINNER_COLOR)
-        text_rect = winner_text.get_rect(center=(popup_x + popup_width // 2, popup_y + popup_height // 2))
-        screen.blit(winner_text, text_rect)
-        pygame.display.flip()
-        clock.tick(30)
+        # Fade effect for winner text
+        for alpha in range(0, 255, 5):  # Fade in
+            screen.fill((0, 0, 0))  # Clear the screen
+            winner_text = creative_font.render(f"{winner} is the Winner!", True, WINNER_COLOR)
+            text_rect = winner_text.get_rect(center=(popup_x + popup_width // 2, popup_y + popup_height // 2))
+            screen.blit(winner_text, text_rect)
 
-    # Pause for a moment
-    pygame.time.delay(2000)
+            pygame.display.flip()
+            clock.tick(30)
 
-    # Fade out effect
-    for alpha in range(255, 0, -5):  # Fade out
-        screen.fill((0, 0, 0))  # Clear the screen
-        pygame.draw.rect(screen, (0, 0, 0, alpha), (popup_x, popup_y, popup_width, popup_height))
-        winner_text = creative_font.render(f"{winner} is the Winner!", True, WINNER_COLOR)
-        text_rect = winner_text.get_rect(center=(popup_x + popup_width // 2, popup_y + popup_height // 2))
-        screen.blit(winner_text, text_rect)
-        pygame.display.flip()
-        clock.tick(30)
+        pygame.time.delay(2000)  # Pause for a moment
+
+        # Load and prepare video
+        video = VideoFileClip('lifee.mp4')
+
+        # Calculate scaling factor to maintain aspect ratio
+        aspect_ratio = video.w / video.h
+        if WIDTH / HEIGHT > aspect_ratio:
+            # Screen is wider relative to the video: fit height, add horizontal padding
+            new_height = HEIGHT
+            new_width = int(aspect_ratio * new_height)
+        else:
+            # Screen is taller relative to the video: fit width, add vertical padding
+            new_width = WIDTH
+            new_height = int(new_width / aspect_ratio)
+
+        # Calculate the centering offset
+        x_offset = (WIDTH - new_width) // 2
+        y_offset = (HEIGHT - new_height) // 2
+
+        # Video playback with fade-in effect
+        for alpha in range(255, 0, -5):  # Fade out text
+            screen.fill((0, 0, 0))  # Clear the screen
+            pygame.display.flip()
+            clock.tick(30)
+
+        # Play video in fullscreen, loop it
+        playing = True
+        while playing:
+            for frame in video.iter_frames(fps=24, dtype="uint8", with_times=False):
+                video_surface = pygame.surfarray.make_surface(frame.swapaxes(0, 1))
+                video_surface = pygame.transform.scale(video_surface, (new_width, new_height))
+                screen.fill((0, 0, 0))  # Clear the screen with black background
+                screen.blit(video_surface, (x_offset, y_offset))  # Center the video
+                pygame.display.flip()
+                clock.tick(24)
+
+            # Event loop to catch exit
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    playing = False
+                    break
+
+        video.close()
+    except Exception as e:
+        print(f"An error occurred during video playback: {e}")
+        pygame.quit()  # Safely terminate pygame if issues arise
+
 
 # Game loop
 running = True
@@ -207,7 +243,7 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-    screen.fill(BLACK)  # Clear the screen with grey
+    screen.fill(BLACK)  # Clear the screen with black
 
     # Move agents and check for resource collection
     for agent in agents:
@@ -229,11 +265,11 @@ while running:
     # Draw the scoreboard
     draw_scoreboard(screen, agents)
 
-    # Check for winner
-    for agent in agents:
-        if agent.score >= 100:  # Example winning condition
-            display_winner(agent.name)
-            running = False  # End the game after declaring a winner
+    # Check if all resources are collected and declare the winner
+    if not resources:  # No resources left
+        winner = max(agents, key=lambda agent: agent.score)  # Find agent with the highest score
+        display_winner_and_play_video(winner.name)
+        running = False  # End the game after declaring the winner
 
     pygame.display.flip()  # Update the display
     clock.tick(10)  # Limit the framerate to 10 FPS
