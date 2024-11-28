@@ -225,19 +225,26 @@ def draw_scoreboard(screen, agents):
             pygame.draw.rect(screen, SCORE_FLASH_COLOR, (cell_x, cell_y, cell_width, cell_height), BORDER_WIDTH)
             agent.flash_count -= 1  # Decrease flash count
 
-# Function to display the winner and play the video
-def display_winner_and_play_video(winner):
+# Function to display the winner(s) and play the video
+def display_winners_and_play_video(winners):
     try:
         # Display winner pop-up
-        popup_width, popup_height = 400, 200
+        popup_width, popup_height = 600, 300
         popup_x = (WIDTH - popup_width) // 2
         popup_y = (HEIGHT - popup_height) // 2
 
         # Fade effect for winner text
         for alpha in range(0, 255, 5):  # Fade in
             screen.fill((0, 0, 0))  # Clear the screen
-            winner_text = creative_font.render(f"{winner} is the Winner!", True, WINNER_COLOR)
-            text_rect = winner_text.get_rect(center=(popup_x + popup_width // 2, popup_y + popup_height // 2))
+            if len(winners) == 1:
+                winner_text = creative_font.render(f"{winners[0]} is the Winner!", True, WINNER_COLOR)
+            else:
+                winner_text = creative_font.render("It's a Tie!", True, WINNER_COLOR)
+                subtext = font.render(f"Winners: {', '.join(winners)}", True, WHITE)
+                subtext_rect = subtext.get_rect(center=(popup_x + popup_width // 2, popup_y + popup_height // 2 + 50))
+                screen.blit(subtext, subtext_rect)
+
+            text_rect = winner_text.get_rect(center=(popup_x + popup_width // 2, popup_y + popup_height // 2 - 20))
             screen.blit(winner_text, text_rect)
 
             pygame.display.flip()
@@ -246,7 +253,7 @@ def display_winner_and_play_video(winner):
         pygame.time.delay(2000)  # Pause for a moment
 
         # Load and prepare video
-        video = VideoFileClip('lifee.mp4')
+        video = VideoFileClip('SRS.mp4')
 
         # Calculate scaling factor to maintain aspect ratio
         aspect_ratio = video.w / video.h
@@ -290,6 +297,7 @@ def display_winner_and_play_video(winner):
         print(f"An error occurred during video playback: {e}")
         pygame.quit()  # Safely terminate pygame if issues arise
 
+
 # Game loop
 running = True
 while running:
@@ -320,11 +328,13 @@ while running:
     # Draw the scoreboard
     draw_scoreboard(screen, agents)
 
-    # Check if all resources are collected and declare the winner
+    # Check if all resources are collected and declare the winner(s)
     if not resources:  # No resources left
-        winner = max(agents, key=lambda agent: agent.score)  # Find agent with the highest score
-        display_winner_and_play_video(winner.name)
-        running = False  # End the game after declaring the winner
+        max_score = max(agent.score for agent in agents)
+        winners = [agent.name for agent in agents if agent.score == max_score]
+
+        display_winners_and_play_video(winners)
+        running = False  # End the game after declaring the winner(s)
 
     pygame.display.flip()  # Update the display
     clock.tick(10)  # Limit the framerate to 10 FPS
