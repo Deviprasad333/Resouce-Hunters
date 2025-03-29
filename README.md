@@ -13,7 +13,7 @@ Welcome to **Resource Hunters**, a thrilling game where agents compete to collec
 
 ## 🎩 Watch the Gameplay Trailer
 
-<video src="https://github.com/Deviprasad333/Resource-Hunters/edit/main/rss.mp4" controls width="600"></video>
+<video src="https://github.com/Deviprasad333/Resouce-Hunters/blob/main/rss.mp4" controls width="600"></video>
 
 ## 🎩 How to Play
 
