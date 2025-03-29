@@ -11,7 +11,7 @@ Welcome to **Resource Hunters**, a thrilling game where agents compete to collec
 - **Victory Condition**: Reach a specified score to become the winner!
 - **Custom Graphics**: Utilize custom images for agents, resources, and obstacles.
 
-## 🕹️ How to Play
+## 🎩 How to Play
 
 1. **Objective**: Collect resources worth 20 points each, while avoiding obstacles and competing against other agents. 
 2. **Winning Condition**: The first agent to reach a score of 100 wins the game! 🏆
@@ -20,7 +20,7 @@ Welcome to **Resource Hunters**, a thrilling game where agents compete to collec
    - ➡️ Right Arrow: Move right
    - ⬆️ Up Arrow: Move up
    - ⬇️ Down Arrow: Move down
-4. **Avoid Obstacles**: Colliding with obstacles will reduce your score by 2 points! 🚧
+4. **Avoid Obstacles**: Colliding with obstacles will reduce your score by 2 points! 🛇
 
 ## 🖥️ Game Setup
 
@@ -34,11 +34,11 @@ Welcome to **Resource Hunters**, a thrilling game where agents compete to collec
 - **Resource**: Items that agents collect to increase their score.
 - **Obstacle**: Objects that agents need to avoid.
 
-## 🏗️ Features
+## 🏠 Features
 
 - **Scoreboard**: A live-updating scoreboard at the bottom displays the agents' scores.
 - **Flash Effect**: The scoreboard cell flashes when an agent scores.
-- **Winning Popup**: A fading effect announces the winner.een.
+- **Winning Popup**: A fading effect announces the winner.
 
 ## Setup and Running the Game 🚀
 
@@ -53,16 +53,20 @@ Welcome to **Resource Hunters**, a thrilling game where agents compete to collec
    - `obstacle.png` for the obstacle image.
 
 4. Run the game using the command:
-python resource_hunters.py
+   ```sh
+   python resource_hunters.py
+   ```
 
+## 📹 Gameplay Video
 
+[Watch Gameplay](https://github.com/your-username/your-repo/blob/main/rss.mp4)
 
 ## Acknowledgements 🙏
 
 - Developed by: **Deviprasad N Shetty**
 - Thanks to the Pygame community for providing an excellent library for game development.
 
-## Additional Notes 📝
+## Additional Notes 🗒️
 
 - Customize the game by using different images or adjusting numbers of agents, resources, and obstacles in the code.
 - The game's current resolution is set for standard screens; modify `WIDTH` and `HEIGHT` as needed for different screen setups.
@@ -71,4 +75,4 @@ Have fun playing **Resource Hunters**! May the best agent win! 🏆
 
 ---
 
-Feel free to enhance the game, add new features, or improve the graphics according to your creativity. 
+Feel free to enhance the game, add new features, or improve the graphics according to your creativity.
