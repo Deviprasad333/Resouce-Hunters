@@ -11,6 +11,10 @@ Welcome to **Resource Hunters**, a thrilling game where agents compete to collec
 - **Victory Condition**: Reach a specified score to become the winner!
 - **Custom Graphics**: Utilize custom images for agents, resources, and obstacles.
 
+## 🎩 Watch the Gameplay Trailer
+
+<video src="https://github.com/your-username/your-repo/blob/main/rss.mp4" controls width="600"></video>
+
 ## 🎩 How to Play
 
 1. **Objective**: Collect resources worth 20 points each, while avoiding obstacles and competing against other agents. 
@@ -34,7 +38,7 @@ Welcome to **Resource Hunters**, a thrilling game where agents compete to collec
 - **Resource**: Items that agents collect to increase their score.
 - **Obstacle**: Objects that agents need to avoid.
 
-## 🏠 Features
+## 🏟️ Features
 
 - **Scoreboard**: A live-updating scoreboard at the bottom displays the agents' scores.
 - **Flash Effect**: The scoreboard cell flashes when an agent scores.
@@ -53,13 +57,9 @@ Welcome to **Resource Hunters**, a thrilling game where agents compete to collec
    - `obstacle.png` for the obstacle image.
 
 4. Run the game using the command:
-   ```sh
+   ```bash
    python resource_hunters.py
    ```
-
-## 📹 Gameplay Video
-
-[Watch Gameplay](https://github.com/your-username/your-repo/blob/main/rss.mp4)
 
 ## Acknowledgements 🙏
 
